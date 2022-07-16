@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Selamat Datang</title>
+    $(if refresh-timeout)
+    <meta http-equiv="refresh" content="$(refresh-timeout-secs)">
+    $(endif)
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <meta name="theme-color" content="#3B5998" />
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;" />
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="expires" content="-1" />
+    <link rel="stylesheet" href="css/style.css">
+
+    <script type="text/javascript">
+    $(if advert-pending == 'yes')
+        var popup = '';
+        function focusAdvert() {
+        if (window.focus) popup.focus();
+        }
+        function openAdvert() {
+        popup = open('$(link-advert)', 'hotspot_advert', '');
+        setTimeout("focusAdvert()", 1000);
+        }
+    $(endif)
+        function openLogout() {
+        if (window.name != 'hotspot_status') return true;
+            open('$(link-logout)', 'hotspot_logout', 'toolbar=0,location=0,directories=0,status=0,menubars=0,resizable=1,width=280,height=250');
+        window.close();
+        return false;
+        }
+    </script>
+
+</head>
+
+<body $(if advert-pending == 'yes') onLoad="openAdvert()" $(endif) >
+    <div class="main">
+        <form action="$(link-logout)" name="logout" onSubmit="return openLogout()">
+
+            $(if login-by == 'trial')
+            <div style="margin-top:20px; text-align: center;">
+                <h3>Selamat datang!</h3>
+                <h3>trial user</h3>
+            </div>
+            <br>
+            $(elif login-by != 'mac')
+            <div
+                style="margin-top:20px; text-align: center; border:1px solid #fff; padding: 5px 10px; border-radius: 5px">
+                <p>Selamat! anda sudah terhubung dengan kode voucher <b
+                        style="font-weight: bold; font-style: italic;">"$(username)"</b></p>
+                <p>Simpan kode voucher anda sampai masa aktif habis.</p>
+            </div>
+            <br>
+            $(endif)
+
+            <table class="table2">
+                <tr>
+                    <td align="right">IP Address</td>
+                    <td>$(ip)</td>
+                </tr>
+                <tr>
+                    <td align="right">MAC Address</td>
+                    <td>$(mac)</td>
+                </tr>
+                <tr>
+                    <td align="right">Upload</td>
+                    <td>$(bytes-in-nice)</td>
+                </tr>
+                <tr>
+                    <td align="right">Download</td>
+                    <td>$(bytes-out-nice)</td>
+                </tr>
+                <tr>
+                    <td align="right">Terkoneksi</td>
+                    <td><span id="uptime"></span></td>
+                </tr>
+                $(if remain-bytes-total)
+                <tr>
+                    <td align="right">Sisa Kuota</td>
+                    <td>$(remain-bytes-total-nice)</td>
+                </tr>
+                $(endif)
+                $(if session-time-left)
+                <tr>
+                    <td align="right">Sisa Waktu</td>
+                    <td><span id="session-time-left"></span></td>
+                </tr>
+                $(endif)
+                $(if blocked == 'yes')
+                <tr>
+                    <td align="right">Status</td>
+                    <td>
+                        <div style="color: #FF8080">
+                            <a href="$(link-advert)" target="hotspot_advert">advertisement</a> required
+                        </div>
+                    </td>
+                </tr>
+                $(elif refresh-timeout)
+                <tr>
+                    <td align="right">Refresh</td>
+                    <td>$(refresh-timeout)</td>
+                </tr>
+                $(endif)
+
+            </table>
+            $(if login-by-mac != 'yes')
+            <br>
+            <!-- user manager link. if user manager resides on other router, replace $(hostname) by its address
+<button onclick="document.location='http://$(hostname)/user?subs='; return false;">status</button>-->
+            <!-- end of user manager link -->
+            <button class="button" type="submit">Logout</button>
+            $(endif)
+        </form>
+
+
+        <div class="info">
+            <i class="icon icon-icon-ok">&#xe805;</i> Informasi pembelian Voucher<br>
+            <i class="icon icon-icon-ok">&#xe805;</i> Pemasangan sinyal wifi RNET<br>
+            <!-- <i class="icon icon-icon-ok">&#xe805;</i> Free Pemasangan sinyal wifi hotspot<br> -->
+            <div>
+                <i class="icon icon-whatsapp">&#xf232;</i> WhatsApp: <b><a style="color:#fff"
+                    href="http://wa.me/6285173229910">0851-7322-9910</a></b>
+            </div>
+        </div>
+
+        <div class="cc">&copy; By PT. SUBNET DATA NISANTARA</div>
+
+    </div>
+
+    <script type="text/javascript">
+        var str = "$(session-time-left)";
+        var mapObj = {
+            d: "hari ",
+            h: "jam ",
+            m: "menit ",
+            s: "detik"
+        };
+        str = str.replace(/d|h|m|s/gi, function (matched) {
+            return mapObj[matched];
+        });
+        document.getElementById("session-time-left").innerHTML = str;
+    </script>
+    <script type="text/javascript">
+        var str = "$(uptime)";
+        var mapObj = {
+            d: "hari ",
+            h: "jam ",
+            m: "menit ",
+            s: "detik"
+        };
+        str = str.replace(/d|h|m|s/gi, function (matched) {
+            return mapObj[matched];
+        });
+        document.getElementById("uptime").innerHTML = str;
+    </script>
+</body>
+
+</html>
